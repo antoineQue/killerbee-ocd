@@ -444,8 +444,8 @@ def kbdecrypt(source_pkt, key = None, verbose = None, doMicCheck = False):
     # Recreate 'pkt' by rebuilding the raw data and mic to match:
     pkt.nwk_seclevel = DOT154_CRYPT_ENC_MIC32
     pkt.data += pkt.mic
-    pkt.mic = pkt.data[-4:]
-    pkt.data = pkt.data[:-4]
+    pkt.mic = pkt.data[-6:-2]
+    pkt.data = pkt.data[:-6]
 
     encrypted = pkt.data
     # So calculate an amount to crop, equal to the size of the encrypted data and mic.  Note that

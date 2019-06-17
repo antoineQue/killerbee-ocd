@@ -107,16 +107,16 @@ arg_delay = 4
 # Parameters to build association packet
 arg_IEE64addr = None    #May be specified on command line
 arg_panID = None        #May be specified on command line
-ASSOC_SEQNUM = '\x70'
+ASSOC_SEQNUM = '\x3F'
 ASSOC_DST = '\x00\x00'
 ASSOC_SRC_PANID = '\xff\xff'
 assoc_packet = None
 
 # Parameters to build data packet
-ASSOC_DATA_SEQNUM = '\x71'
+ASSOC_DATA_SEQNUM = '\x40'
 
 # key transport data arguments
-DATA_KEY_SEQNUM = '\x72'
+DATA_KEY_SEQNUM = '\x41'
 
 # Command Line Processing
 while len(sys.argv) > 1:
@@ -163,6 +163,12 @@ kb = KillerBee(device=arg_devstring)
 signal.signal(signal.SIGINT, interrupt)
 kb.set_channel(arg_channel)
 
+
+beacon_request = "\x03\x08\x3e\xff\xff\xff\xff\x07"
+print("Inject beacon request...")
+kb.inject(beacon_request)
+
+
 #./zbkey -f 14 -R test1 -s 0.1 -p aa1a -a 0fc8071c08c25100 -i [deviceid]
 
 # Build the packet we use to send ASSOCIATION REQUEST
@@ -177,7 +183,6 @@ kb.inject(assoc_packet)
 # Build the data packet sent after the association response is received
 data_assoc_packet  = '\x63\xc8'+ASSOC_DATA_SEQNUM+arg_panID+ASSOC_DST+arg_IEE64addr+'\x04' #data packet after association        
 
-time.sleep(0.5)
 # send data after association packet
 print "Sending data request packet..."
 #print kbutils.hexdump(data_assoc_packet)
