@@ -163,11 +163,11 @@ kb = KillerBee(device=arg_devstring)
 signal.signal(signal.SIGINT, interrupt)
 kb.set_channel(arg_channel)
 
-
+'''
 beacon_request = "\x03\x08\x3e\xff\xff\xff\xff\x07"
 print("Inject beacon request...")
 kb.inject(beacon_request)
-
+'''
 
 #./zbkey -f 14 -R test1 -s 0.1 -p aa1a -a 0fc8071c08c25100 -i [deviceid]
 
@@ -188,7 +188,6 @@ print "Sending data request packet..."
 #print kbutils.hexdump(data_assoc_packet)
 kb.inject(data_assoc_packet)
 
-
 while True:
     recvpkt = kb.pnext()
     if recvpkt != None:
@@ -198,7 +197,7 @@ while True:
             value = associate_response_handle(recvpkt['bytes'])
             if value != None:
                 print "Short address: {0}".format(repr(value))
-                kb.sniffer_off()
+                #kb.sniffer_off()
                 kb.inject('\x02\x00'+getAckByte(recvpkt['bytes']))
                 break
 

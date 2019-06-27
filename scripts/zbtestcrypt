@@ -167,7 +167,7 @@ if __name__ == '__main__':
         print
         print 'Packet:', count
         #print packet.layers(False) # debug
-        print packet.layers() # debug
+        #print repr(packet) # debug
         print '  ', packet.summary()
         if args.verbose:
             print '  ', repr(packet)
@@ -283,6 +283,7 @@ if __name__ == '__main__':
 
                 print '   encrypting NWK...'
                 stat, newpkt= crypt(packet, data= decrypted, encrypt= True)
+                #print repr(newpkt)
                 if stat:
                     if args.verbose:
                         print '  ', repr(newpkt)
@@ -307,6 +308,7 @@ if __name__ == '__main__':
                 kb.inject(str(packet), args.channel, 1, args.delay, page= args.subghz_page)
                 print '        OK'
                 #debug
+                print("command")
                 print packet.command()
 		for x in str(packet):
 			print '0x%02x' % ord(x),
@@ -315,8 +317,15 @@ if __name__ == '__main__':
                 print '        FAILED!'
         if args.transmit_crypted and newpkt:
             print '      transmitting RE-ENCRYPTED on channel', args.channel
+
+            print("REPR   {0}".format(str(packet)))
+            print("STR   {0}".format(len(str(packet))))
+            print(packet[ZigbeeNWK].fc)
+
+            #kb.inject(str(packet)[:-4], args.channel, 1, args.delay, page= args.subghz_page)
+
             try:
-                kb.inject(str(packet), args.channel, 1, args.delay, page= args.subghz_page)
+                kb.inject(str(packet)[:-4], args.channel, 1, args.delay, page= args.subghz_page)
                 print '        OK'
             except:
                 print '        FAILED!'
